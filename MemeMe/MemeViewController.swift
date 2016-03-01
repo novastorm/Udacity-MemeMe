@@ -1,6 +1,6 @@
 //
 //  MemeViewController.swift
-//  Image Picker
+//  MemeMe
 //
 //  Created by Adland Lee on 2/6/16.
 //  Copyright © 2016 Adland Lee. All rights reserved.
@@ -11,6 +11,7 @@ import UIKit
 class MemeViewController: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
+//    @IBOutlet weak var imageView: UIImageView!
     var imageView = UIImageView()
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     @IBOutlet weak var topText: UITextField!
@@ -20,6 +21,7 @@ class MemeViewController: UIViewController {
     
     var viewShiftedForKeyboard = false
     var memedImage: UIImage!
+    
     var meme: Meme?
     
     let memeTextAttributes = [
@@ -35,7 +37,6 @@ class MemeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         topText.defaultTextAttributes = memeTextAttributes
         bottomText.defaultTextAttributes = memeTextAttributes
         
@@ -43,13 +44,22 @@ class MemeViewController: UIViewController {
         bottomText.textAlignment = .Center
         
         imageView.userInteractionEnabled = true
+        imageView.frame = scrollView.bounds
+        imageView.backgroundColor = UIColor.greenColor()
         scrollView.addSubview(imageView)
-
+        
         resetMemeEditor()
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
+        
+        if let meme = self.meme {
+            self.imageView.image = meme.image
+            self.topText.text = meme.topText
+            self.bottomText.text = meme.bottomText
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -74,17 +84,19 @@ class MemeViewController: UIViewController {
         generateMemedImage()
         let controller = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
         presentViewController(controller, animated: true, completion: nil)
+        self.save()
     }
     
     @IBAction func cancelEditing(sender: AnyObject) {
-        resetMemeEditor()
+//        resetMemeEditor()
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func resetMemeEditor() {
         topText.text = "TOP"
         bottomText.text = "BOTTOM"
         
-        imageView.frame = CGRectMake(0, 0, scrollView.frame.size.width, scrollView.frame.size.height)
+        imageView.frame = CGRect(origin: CGPoint(x:0, y:0), size: scrollView.frame.size)
         imageView.image = nil
     }
     
@@ -122,34 +134,38 @@ class MemeViewController: UIViewController {
     
     // MARK: - Management
     
-    func generateMemedImage() -> UIImage {
+    func generateMemedImage() {
         // Hide toolbar and navbar
         self.navigationBar.hidden = true
         self.toolBar.hidden = true
         
         // Render view into an image
-        UIGraphicsBeginImageContext(scrollView.bounds.size)
-        view.drawViewHierarchyInRect(scrollView.bounds, afterScreenUpdates: true)
+        var outputFrame = self.view.frame
+        
+        // set outputFrame drawing origin
+        outputFrame.origin.y = scrollView.frame.origin.y * -1
+
+        UIGraphicsBeginImageContext(self.scrollView.frame.size)
+        self.view.drawViewHierarchyInRect(outputFrame, afterScreenUpdates: true)
         self.memedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
         // Show toolbar and navbar
         self.navigationBar.hidden = false
         self.toolBar.hidden = false
-
-        return memedImage
     }
     
     func save() {
         let topText = self.topText.text
         let bottomText = self.bottomText.text
         let image = imageView.image
-        let memedImage = self.memedImage
+        let memedImage = self.memedImage.copy() as! UIImage
         
-        self.meme = Meme(topText: topText, bottomText: bottomText, image: image, memedImage: memedImage)
+        let meme = Meme(topText: topText, bottomText: bottomText, image: image, memedImage: memedImage)
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        appDelegate.memes.append(meme)
     }
-    
-    
 }
 
 // MARK: - Navigation Controller Delegate
@@ -165,8 +181,7 @@ extension MemeViewController: UIImagePickerControllerDelegate {
             scrollView.zoomScale = 1.0
 
             imageView.image = image
-            imageView.contentMode = UIViewContentMode.Center
-            imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height)
+            imageView.frame = CGRect(origin: scrollView.frame.origin, size:image.size)
             
             scrollView.contentSize = image.size
             
@@ -174,11 +189,12 @@ extension MemeViewController: UIImagePickerControllerDelegate {
             let scaleWidth = scrollViewFrame.size.width / scrollView.contentSize.width
             let scaleHeight = scrollViewFrame.size.height / scrollView.contentSize.height
             
-            let initialImageScale = max(scaleWidth, scaleHeight)
+            let minScale = min(scaleWidth, scaleHeight)
+            let initialScale = max(scaleWidth, scaleHeight)
             
-            scrollView.minimumZoomScale = initialImageScale
+            scrollView.minimumZoomScale = minScale
             scrollView.maximumZoomScale = 1.0
-            scrollView.zoomScale = initialImageScale
+            scrollView.zoomScale = initialScale
             
             centerScrollViewContents()
             
@@ -193,19 +209,19 @@ extension MemeViewController: UIImagePickerControllerDelegate {
     func centerScrollViewContents() {
         let boundsSize = scrollView.bounds.size
         var contentsFrame = imageView.frame
-        
+
         if contentsFrame.size.width < boundsSize.width {
             contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2
         }
         else {
-            contentsFrame.origin.x = 0
+            contentsFrame.origin.x = 0.0
         }
         
         if contentsFrame.size.height < boundsSize.height {
             contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2
         }
         else {
-            contentsFrame.origin.y = 0
+            contentsFrame.origin.y = 0.0
         }
         
         imageView.frame = contentsFrame
