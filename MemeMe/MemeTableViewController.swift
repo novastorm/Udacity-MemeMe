@@ -29,8 +29,21 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         
         // Set the name and image
         cell.imageView?.image = meme.memedImage
-        cell.textLabel?.text = "\(meme.topText) \(meme.bottomText)"
+        cell.textLabel?.text = "\(meme.topText!) \(meme.bottomText!)"
         
         return cell
+    }
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        switch segue.identifier! {
+        case "CreateMeme":
+            break
+        case "ShowMeme":
+            print("ShowMeme")
+            let MemeVC = segue.destinationViewController as! MemeViewController
+            MemeVC.meme = memes[(self.view as! UITableView).indexPathForSelectedRow!.row]
+        default:
+            print("Undefined")
+        }
     }
 }
