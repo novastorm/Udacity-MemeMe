@@ -33,17 +33,27 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         
         return cell
     }
-
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        switch segue.identifier! {
-        case "CreateMeme":
-            break
-        case "ShowMeme":
-            print("ShowMeme")
-            let MemeVC = segue.destinationViewController as! MemeViewController
-            MemeVC.meme = memes[(self.view as! UITableView).indexPathForSelectedRow!.row]
-        default:
-            print("Undefined")
-        }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let detailVC = self.storyboard!.instantiateViewControllerWithIdentifier("MemeDetailViewController") as! MemeDetailViewController
+        
+        detailVC.meme = memes[indexPath.row]
+        
+        self.navigationController!.pushViewController(detailVC, animated: true)
     }
+
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//        switch segue.identifier! {
+//        case "CreateMeme":
+//            break
+//        case "ShowMeme":
+//            print("ShowMeme")
+//            let navVC = segue.destinationViewController as! UINavigationController
+//            let MemeVC = navVC.topViewController as! MemeDetailController
+//            let indexPath = (self.view as! UITableView).indexPathForSelectedRow! as NSIndexPath
+//            MemeVC.meme = memes[indexPath.row]
+//        default:
+//            print("Undefined")
+//        }
+//    }
 }
