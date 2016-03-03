@@ -24,9 +24,12 @@ class MemeCollectionViewController: UICollectionViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.hidden = false
+        self.collectionView!.reloadData()
     }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        
         if flowLayout != nil {
             self.updateFlowLayout(size)
         }
@@ -40,30 +43,31 @@ class MemeCollectionViewController: UICollectionViewController {
         let cellIdentifier = "MemeCollectionViewCell"
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! MemeCollectionViewCell
-        let meme = self.memes[indexPath.row]
+        let meme = self.memes[indexPath.item]
         
-        // Set the name and image
-        //cell.nameLabel.text = villain.name
+        // Set cell properties
         cell.imageView?.image = meme.memedImage
-        //cell.schemeLabel.text = "Scheme: \(villain.evilScheme)"
         
         return cell
     }
-    
+
+    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        print(indexPath.item)
+        let detailVC = self.storyboard!.instantiateViewControllerWithIdentifier("MemeDetailViewController") as! MemeDetailViewController
+        
+        detailVC.meme = self.memes[indexPath.item]
+        
+        self.navigationController!.pushViewController(detailVC, animated: true)
+    }
+        
     func updateFlowLayout(size: CGSize) {
-        print(size)
-        
-        let dimension: CGFloat!
-        
         let space: CGFloat = 3.0
-        let col3 = (size.width - (2 * space)) / 3.0
-        let col5 = (size.width - (4 * space)) / 5.0
-        
-        if size.width < size.height {
-            dimension = col3
+        var dimension: CGFloat!
+        if size.height > size.width {
+            dimension = (size.width - (2 * space)) / 3.0
         }
         else {
-            dimension = col5
+            dimension = (size.width - (4 * space)) / 5.0
         }
         
         flowLayout.minimumInteritemSpacing = space

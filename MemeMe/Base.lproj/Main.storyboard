@@ -6,7 +6,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Meme Collection View Controller-->
+        <!--Sent Memes-->
         <scene sceneID="sen-WA-5sH">
             <objects>
                 <collectionViewController id="bNV-3M-Jjd" customClass="MemeCollectionViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
@@ -27,12 +27,20 @@
                                     <rect key="frame" x="0.0" y="0.0" width="121" height="113"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SID-Fp-unW">
-                                            <rect key="frame" x="0.0" y="0.0" width="121" height="113"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SID-Fp-unW">
+                                            <rect key="frame" x="8" y="8" width="105" height="97"/>
+                                            <color key="backgroundColor" red="0.64438486240000004" green="1" blue="0.50815271100000003" alpha="1" colorSpace="calibratedRGB"/>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="SID-Fp-unW" firstAttribute="top" secondItem="ahq-Le-sht" secondAttribute="topMargin" id="Cla-Vo-Qhq"/>
+                                    <constraint firstItem="SID-Fp-unW" firstAttribute="bottom" secondItem="ahq-Le-sht" secondAttribute="bottomMargin" id="ISs-vO-fnc"/>
+                                    <constraint firstItem="SID-Fp-unW" firstAttribute="leading" secondItem="ahq-Le-sht" secondAttribute="leadingMargin" id="ZvC-5Q-BFN"/>
+                                    <constraint firstItem="SID-Fp-unW" firstAttribute="trailing" secondItem="ahq-Le-sht" secondAttribute="trailingMargin" id="aNf-Yt-yS2"/>
+                                </constraints>
                                 <connections>
                                     <outlet property="imageView" destination="SID-Fp-unW" id="E7F-D9-tax"/>
                                 </connections>
@@ -43,7 +51,13 @@
                             <outlet property="delegate" destination="bNV-3M-Jjd" id="f0N-ME-54j"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="nmZ-Xv-ppl"/>
+                    <navigationItem key="navigationItem" title="Sent Memes" id="nmZ-Xv-ppl">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="HeR-rR-x7R">
+                            <connections>
+                                <segue destination="BYZ-38-t0r" kind="presentation" id="xae-ic-8DA"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
                         <outlet property="flowLayout" destination="5Qh-bA-AMd" id="aTt-9u-D3h"/>
@@ -62,7 +76,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MemeCell" textLabel="Bhq-3d-a4f" style="IBUITableViewCellStyleDefault" id="8O0-Ii-0NE">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MemeTableViewCell" textLabel="Bhq-3d-a4f" style="IBUITableViewCellStyleDefault" id="8O0-Ii-0NE">
                                 <rect key="frame" x="0.0" y="92" width="414" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8O0-Ii-0NE" id="8Qs-xy-X90">
@@ -303,4 +317,7 @@
             <point key="canvasLocation" x="625" y="-428"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="LA9-6a-oKU"/>
+    </inferredMetricsTieBreakers>
 </document>
