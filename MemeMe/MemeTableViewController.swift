@@ -17,13 +17,14 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewWillAppear(animated)
         (self.view as! UITableView).reloadData()
     }
+
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.memes.count
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cellIdentifier = "MemeCell"
+        let cellIdentifier = "MemeTableViewCell"
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier)!
         let meme = self.memes[indexPath.row]
         
@@ -33,17 +34,27 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         
         return cell
     }
-
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        switch segue.identifier! {
-        case "CreateMeme":
-            break
-        case "ShowMeme":
-            print("ShowMeme")
-            let MemeVC = segue.destinationViewController as! MemeViewController
-            MemeVC.meme = memes[(self.view as! UITableView).indexPathForSelectedRow!.row]
-        default:
-            print("Undefined")
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            (UIApplication.sharedApplication().delegate as! AppDelegate).memes.removeAtIndex(indexPath.row)
+            (self.view as! UITableView).deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         }
     }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let detailVC = self.storyboard!.instantiateViewControllerWithIdentifier("MemeDetailViewController") as! MemeDetailViewController
+        
+        detailVC.meme = memes[indexPath.row]
+        
+        self.navigationController!.pushViewController(detailVC, animated: true)
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.memes.count
+    }
+}
+
+class MemeTableViewCell: UITableViewCell {
+    // TODO: Customize cell layout
 }

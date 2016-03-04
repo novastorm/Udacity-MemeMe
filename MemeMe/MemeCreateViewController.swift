@@ -1,5 +1,5 @@
 //
-//  MemeViewController.swift
+//  MemeCreateViewController.swift
 //  MemeMe
 //
 //  Created by Adland Lee on 2/6/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MemeViewController: UIViewController {
+class MemeCreateViewController: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
 //    @IBOutlet weak var imageView: UIImageView!
@@ -45,7 +45,7 @@ class MemeViewController: UIViewController {
         
         imageView.userInteractionEnabled = true
         imageView.frame = scrollView.bounds
-        imageView.backgroundColor = UIColor.greenColor()
+//        imageView.backgroundColor = UIColor.greenColor()
         scrollView.addSubview(imageView)
         
         resetMemeEditor()
@@ -56,9 +56,29 @@ class MemeViewController: UIViewController {
         cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
         
         if let meme = self.meme {
-            self.imageView.image = meme.image
             self.topText.text = meme.topText
             self.bottomText.text = meme.bottomText
+            self.imageView.image = meme.image
+            if let image = meme.image, contentOffset = meme.contentOffset,
+                zoomScale = meme.zoomScale {
+                imageView.frame = CGRect(origin: scrollView.frame.origin, size:image.size)
+                scrollView.contentSize = image.size
+
+                let scrollViewFrame = scrollView.frame
+                let scaleWidth = scrollViewFrame.size.width / scrollView.contentSize.width
+                let scaleHeight = scrollViewFrame.size.height / scrollView.contentSize.height
+                
+                let minScale = min(scaleWidth, scaleHeight)
+                let initialScale = zoomScale
+                
+                scrollView.minimumZoomScale = minScale
+                scrollView.maximumZoomScale = 1.0
+                scrollView.zoomScale = initialScale
+                    
+                scrollView.contentOffset = contentOffset
+                
+                centerScrollViewContents()
+            }
         }
     }
     
@@ -90,6 +110,31 @@ class MemeViewController: UIViewController {
     @IBAction func cancelEditing(sender: AnyObject) {
 //        resetMemeEditor()
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        self.centerScrollViewContents()
+    }
+    
+    func centerScrollViewContents() {
+        let boundsSize = scrollView.bounds.size
+        var contentsFrame = imageView.frame
+        
+        if contentsFrame.size.width < boundsSize.width {
+            contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2
+        }
+        else {
+            contentsFrame.origin.x = 0.0
+        }
+        
+        if contentsFrame.size.height < boundsSize.height {
+            contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2
+        }
+        else {
+            contentsFrame.origin.y = 0.0
+        }
+        
+        imageView.frame = contentsFrame
     }
     
     func resetMemeEditor() {
@@ -159,9 +204,10 @@ class MemeViewController: UIViewController {
         let topText = self.topText.text
         let bottomText = self.bottomText.text
         let image = imageView.image
+        let imageOffset = scrollView.contentOffset
         let memedImage = self.memedImage.copy() as! UIImage
         
-        let meme = Meme(topText: topText, bottomText: bottomText, image: image, memedImage: memedImage)
+        let meme = Meme(topText: topText, bottomText: bottomText, image: image, zoomScale: scrollView.zoomScale, contentOffset: imageOffset, memedImage: memedImage)
         
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.memes.append(meme)
@@ -170,11 +216,11 @@ class MemeViewController: UIViewController {
 
 // MARK: - Navigation Controller Delegate
 
-extension MemeViewController: UINavigationControllerDelegate {}
+extension MemeCreateViewController: UINavigationControllerDelegate {}
 
 // MARK: - Image Picker Controller Delegate
 
-extension MemeViewController: UIImagePickerControllerDelegate {
+extension MemeCreateViewController: UIImagePickerControllerDelegate {
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             // reset zoomescale before changing image
@@ -206,32 +252,11 @@ extension MemeViewController: UIImagePickerControllerDelegate {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func centerScrollViewContents() {
-        let boundsSize = scrollView.bounds.size
-        var contentsFrame = imageView.frame
-
-        if contentsFrame.size.width < boundsSize.width {
-            contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2
-        }
-        else {
-            contentsFrame.origin.x = 0.0
-        }
-        
-        if contentsFrame.size.height < boundsSize.height {
-            contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2
-        }
-        else {
-            contentsFrame.origin.y = 0.0
-        }
-        
-        imageView.frame = contentsFrame
-    }
-
 }
 
 // MARK: - Scroll View Delegate
 
-extension MemeViewController: UIScrollViewDelegate {
+extension MemeCreateViewController: UIScrollViewDelegate {
     func scrollViewDidZoom(scrollView: UIScrollView) {
         centerScrollViewContents()
     }
@@ -243,7 +268,7 @@ extension MemeViewController: UIScrollViewDelegate {
 
 // MARK: - Text Field Delegate
 
-extension MemeViewController: UITextFieldDelegate {
+extension MemeCreateViewController: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(textField: UITextField) {
         if (textField.text == "TOP") || (textField.text == "BOTTOM") {
