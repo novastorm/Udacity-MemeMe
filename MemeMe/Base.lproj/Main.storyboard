@@ -249,12 +249,12 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
-                        <outlet property="bottomText" destination="sth-N9-L00" id="od8-6Y-zJF"/>
+                        <outlet property="bottomTextField" destination="sth-N9-L00" id="nbo-ry-sbW"/>
                         <outlet property="cameraButton" destination="eV4-d1-x9y" id="ciR-2f-siw"/>
                         <outlet property="navigationBar" destination="5Qe-1y-TPk" id="l71-Yv-vwC"/>
                         <outlet property="scrollView" destination="A7P-0U-3P3" id="3hB-3N-6Ja"/>
                         <outlet property="toolBar" destination="3wm-mY-TwI" id="3Tn-ir-CZR"/>
-                        <outlet property="topText" destination="DN5-sk-NYz" id="YWi-HZ-ECw"/>
+                        <outlet property="topTextField" destination="DN5-sk-NYz" id="0Qe-ho-GnX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
