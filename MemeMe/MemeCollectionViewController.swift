@@ -18,32 +18,32 @@ class MemeCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.updateFlowLayout(self.view.frame.size)
+        updateFlowLayout(view.frame.size)
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.hidden = false
-        self.collectionView!.reloadData()
+        tabBarController?.tabBar.hidden = false
+        collectionView!.reloadData()
     }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
         
         if flowLayout != nil {
-            self.updateFlowLayout(size)
+            updateFlowLayout(size)
         }
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.memes.count
+        return memes.count
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cellIdentifier = "MemeCollectionViewCell"
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! MemeCollectionViewCell
-        let meme = self.memes[indexPath.item]
+        let meme = memes[indexPath.item]
         
         // Set cell properties
         cell.imageView?.image = meme.memedImage
@@ -53,11 +53,11 @@ class MemeCollectionViewController: UICollectionViewController {
 
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         print(indexPath.item)
-        let detailVC = self.storyboard!.instantiateViewControllerWithIdentifier("MemeDetailViewController") as! MemeDetailViewController
+        let detailVC = storyboard!.instantiateViewControllerWithIdentifier("MemeDetailViewController") as! MemeDetailViewController
         
-        detailVC.meme = self.memes[indexPath.item]
+        detailVC.meme = memes[indexPath.item]
         
-        self.navigationController!.pushViewController(detailVC, animated: true)
+        navigationController!.pushViewController(detailVC, animated: true)
     }
         
     func updateFlowLayout(size: CGSize) {

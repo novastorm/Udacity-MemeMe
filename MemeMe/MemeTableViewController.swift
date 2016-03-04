@@ -15,7 +15,7 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        (self.view as! UITableView).reloadData()
+        (view as! UITableView).reloadData()
     }
 
     
@@ -26,7 +26,7 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cellIdentifier = "MemeTableViewCell"
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier)!
-        let meme = self.memes[indexPath.row]
+        let meme = memes[indexPath.row]
         
         // Set the name and image
         cell.imageView?.image = meme.memedImage
@@ -38,20 +38,20 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             (UIApplication.sharedApplication().delegate as! AppDelegate).memes.removeAtIndex(indexPath.row)
-            (self.view as! UITableView).deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            (view as! UITableView).deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         }
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let detailVC = self.storyboard!.instantiateViewControllerWithIdentifier("MemeDetailViewController") as! MemeDetailViewController
+        let detailVC = storyboard!.instantiateViewControllerWithIdentifier("MemeDetailViewController") as! MemeDetailViewController
         
         detailVC.meme = memes[indexPath.row]
         
-        self.navigationController!.pushViewController(detailVC, animated: true)
+        navigationController!.pushViewController(detailVC, animated: true)
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.memes.count
+        return memes.count
     }
 }
 
