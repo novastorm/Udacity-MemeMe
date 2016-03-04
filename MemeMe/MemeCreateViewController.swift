@@ -1,5 +1,5 @@
 //
-//  MemeViewController.swift
+//  MemeCreateViewController.swift
 //  MemeMe
 //
 //  Created by Adland Lee on 2/6/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MemeViewController: UIViewController {
+class MemeCreateViewController: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
 //    @IBOutlet weak var imageView: UIImageView!
@@ -55,11 +55,31 @@ class MemeViewController: UIViewController {
         super.viewWillAppear(animated)
         cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
         
-//        if let meme = self.meme {
-//            self.imageView.image = meme.image
-//            self.topText.text = meme.topText
-//            self.bottomText.text = meme.bottomText
-//        }
+        if let meme = self.meme {
+            self.topText.text = meme.topText
+            self.bottomText.text = meme.bottomText
+            self.imageView.image = meme.image
+            if let image = meme.image, contentOffset = meme.contentOffset,
+                zoomScale = meme.zoomScale {
+                imageView.frame = CGRect(origin: scrollView.frame.origin, size:image.size)
+                scrollView.contentSize = image.size
+
+                let scrollViewFrame = scrollView.frame
+                let scaleWidth = scrollViewFrame.size.width / scrollView.contentSize.width
+                let scaleHeight = scrollViewFrame.size.height / scrollView.contentSize.height
+                
+                let minScale = min(scaleWidth, scaleHeight)
+                let initialScale = zoomScale
+                
+                scrollView.minimumZoomScale = minScale
+                scrollView.maximumZoomScale = 1.0
+                scrollView.zoomScale = initialScale
+                    
+                scrollView.contentOffset = contentOffset
+                
+                centerScrollViewContents()
+            }
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -184,9 +204,10 @@ class MemeViewController: UIViewController {
         let topText = self.topText.text
         let bottomText = self.bottomText.text
         let image = imageView.image
+        let imageOffset = scrollView.contentOffset
         let memedImage = self.memedImage.copy() as! UIImage
         
-        let meme = Meme(topText: topText, bottomText: bottomText, image: image, memedImage: memedImage)
+        let meme = Meme(topText: topText, bottomText: bottomText, image: image, zoomScale: scrollView.zoomScale, contentOffset: imageOffset, memedImage: memedImage)
         
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.memes.append(meme)
@@ -195,13 +216,15 @@ class MemeViewController: UIViewController {
 
 // MARK: - Navigation Controller Delegate
 
-extension MemeViewController: UINavigationControllerDelegate {}
+extension MemeCreateViewController: UINavigationControllerDelegate {}
 
 // MARK: - Image Picker Controller Delegate
 
-extension MemeViewController: UIImagePickerControllerDelegate {
+extension MemeCreateViewController: UIImagePickerControllerDelegate {
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        print("IPC didFinishPickingMediaWithInfo")
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            print(info)
             // reset zoomescale before changing image
             scrollView.zoomScale = 1.0
 
@@ -235,7 +258,7 @@ extension MemeViewController: UIImagePickerControllerDelegate {
 
 // MARK: - Scroll View Delegate
 
-extension MemeViewController: UIScrollViewDelegate {
+extension MemeCreateViewController: UIScrollViewDelegate {
     func scrollViewDidZoom(scrollView: UIScrollView) {
         centerScrollViewContents()
     }
@@ -247,7 +270,7 @@ extension MemeViewController: UIScrollViewDelegate {
 
 // MARK: - Text Field Delegate
 
-extension MemeViewController: UITextFieldDelegate {
+extension MemeCreateViewController: UITextFieldDelegate {
 
     func textFieldDidBeginEditing(textField: UITextField) {
         if (textField.text == "TOP") || (textField.text == "BOTTOM") {

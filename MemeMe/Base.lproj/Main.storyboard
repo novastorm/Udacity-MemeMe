@@ -136,7 +136,13 @@
                             <constraint firstAttribute="trailingMargin" secondItem="dPi-DY-gOQ" secondAttribute="trailing" constant="-20" id="uGS-i0-9d4"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="TZs-9s-DsA"/>
+                    <navigationItem key="navigationItem" id="TZs-9s-DsA">
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="Z2V-oq-Shg">
+                            <connections>
+                                <action selector="editMeme:" destination="bkP-IK-gJm" id="T5T-ST-OuP"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
@@ -147,10 +153,10 @@
             </objects>
             <point key="canvasLocation" x="2145" y="415"/>
         </scene>
-        <!--Meme View Controller-->
+        <!--Meme Create View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="MemeViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MemeCreateViewController" id="BYZ-38-t0r" customClass="MemeCreateViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>

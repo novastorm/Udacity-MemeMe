@@ -13,12 +13,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var memes = [Meme]()
-//    var memes: [Meme] = [
-//        Meme(topText: "AAAA", bottomText: "aaaa", image: nil, memedImage: nil),
-//        Meme(topText: "BBBB", bottomText: "bbbb", image: nil, memedImage: nil),
-//        Meme(topText: "CCCC", bottomText: "cccc", image: nil, memedImage: nil),
-//    ]
-
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
