@@ -54,3 +54,7 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
         return self.memes.count
     }
 }
+
+class MemeTableViewCell: UITableViewCell {
+    // TODO: Customize cell layout
+}

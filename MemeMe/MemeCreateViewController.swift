@@ -45,7 +45,7 @@ class MemeCreateViewController: UIViewController {
         
         imageView.userInteractionEnabled = true
         imageView.frame = scrollView.bounds
-        imageView.backgroundColor = UIColor.greenColor()
+//        imageView.backgroundColor = UIColor.greenColor()
         scrollView.addSubview(imageView)
         
         resetMemeEditor()
@@ -222,9 +222,7 @@ extension MemeCreateViewController: UINavigationControllerDelegate {}
 
 extension MemeCreateViewController: UIImagePickerControllerDelegate {
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        print("IPC didFinishPickingMediaWithInfo")
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            print(info)
             // reset zoomescale before changing image
             scrollView.zoomScale = 1.0
 

@@ -6,10 +6,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Sent Memes-->
+        <!--Sent Memes Collection-->
         <scene sceneID="sen-WA-5sH">
             <objects>
-                <collectionViewController id="bNV-3M-Jjd" customClass="MemeCollectionViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController title="Sent Memes Collection" id="bNV-3M-Jjd" customClass="MemeCollectionViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="0mr-CD-7Ob">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -28,18 +28,17 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SID-Fp-unW">
-                                            <rect key="frame" x="8" y="8" width="105" height="97"/>
-                                            <color key="backgroundColor" red="0.64438486240000004" green="1" blue="0.50815271100000003" alpha="1" colorSpace="calibratedRGB"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="121" height="113"/>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="SID-Fp-unW" firstAttribute="top" secondItem="ahq-Le-sht" secondAttribute="topMargin" id="Cla-Vo-Qhq"/>
-                                    <constraint firstItem="SID-Fp-unW" firstAttribute="bottom" secondItem="ahq-Le-sht" secondAttribute="bottomMargin" id="ISs-vO-fnc"/>
-                                    <constraint firstItem="SID-Fp-unW" firstAttribute="leading" secondItem="ahq-Le-sht" secondAttribute="leadingMargin" id="ZvC-5Q-BFN"/>
-                                    <constraint firstItem="SID-Fp-unW" firstAttribute="trailing" secondItem="ahq-Le-sht" secondAttribute="trailingMargin" id="aNf-Yt-yS2"/>
+                                    <constraint firstItem="SID-Fp-unW" firstAttribute="top" secondItem="ahq-Le-sht" secondAttribute="topMargin" constant="-8" id="Cla-Vo-Qhq"/>
+                                    <constraint firstItem="SID-Fp-unW" firstAttribute="bottom" secondItem="ahq-Le-sht" secondAttribute="bottomMargin" constant="8" id="ISs-vO-fnc"/>
+                                    <constraint firstItem="SID-Fp-unW" firstAttribute="leading" secondItem="ahq-Le-sht" secondAttribute="leadingMargin" constant="-8" id="ZvC-5Q-BFN"/>
+                                    <constraint firstItem="SID-Fp-unW" firstAttribute="trailing" secondItem="ahq-Le-sht" secondAttribute="trailingMargin" constant="8" id="aNf-Yt-yS2"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="imageView" destination="SID-Fp-unW" id="E7F-D9-tax"/>
@@ -67,24 +66,24 @@
             </objects>
             <point key="canvasLocation" x="1277" y="-428"/>
         </scene>
-        <!--Sent Memes-->
+        <!--Sent Memes Table-->
         <scene sceneID="fFI-RN-08B">
             <objects>
-                <tableViewController id="8jd-M6-Izk" customClass="MemeTableViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="MKd-tH-5Cw">
+                <tableViewController title="Sent Memes Table" id="8jd-M6-Izk" customClass="MemeTableViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" sectionHeaderHeight="28" sectionFooterHeight="28" id="MKd-tH-5Cw">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MemeTableViewCell" textLabel="Bhq-3d-a4f" style="IBUITableViewCellStyleDefault" id="8O0-Ii-0NE">
-                                <rect key="frame" x="0.0" y="92" width="414" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MemeTableViewCell" textLabel="Bhq-3d-a4f" rowHeight="100" style="IBUITableViewCellStyleDefault" id="8O0-Ii-0NE" customClass="MemeTableViewCell" customModule="MemeMe" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="414" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8O0-Ii-0NE" id="8Qs-xy-X90">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="99.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Bhq-3d-a4f">
-                                            <rect key="frame" x="15" y="0.0" width="384" height="43.5"/>
+                                            <rect key="frame" x="15" y="0.0" width="384" height="99.5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -167,7 +166,6 @@
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="TopLeft" placeholderIntrinsicWidth="1024" placeholderIntrinsicHeight="768" translatesAutoresizingMaskIntoConstraints="NO" id="A7P-0U-3P3">
                                 <rect key="frame" x="0.0" y="44" width="414" height="648"/>
-                                <color key="backgroundColor" red="1" green="0.56656452644696254" blue="0.94934557053918389" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="k2b-bG-IK2"/>
                                 </connections>
@@ -324,6 +322,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="LA9-6a-oKU"/>
+        <segue reference="xae-ic-8DA"/>
     </inferredMetricsTieBreakers>
 </document>
