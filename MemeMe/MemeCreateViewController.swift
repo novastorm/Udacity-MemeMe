@@ -117,7 +117,7 @@ class MemeCreateViewController: UIViewController {
         let controller = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
         
         controller.completionWithItemsHandler = {
-            (activityType: String?, completed: Bool, returnedItems: [AnyObject]?, activityError: NSError?) -> Void in
+            (activityType, completed, returnedItems, activityError) in
             if completed {
                 self.saveMeme(
                     image: self.imageView.image!,
