@@ -27,16 +27,16 @@ class MemeCreateViewController: UIViewController {
     var meme: Meme?
     
     let memeTextAttributes = [
-        NSStrokeColorAttributeName: UIColor.blackColor(),
-        NSForegroundColorAttributeName: UIColor.whiteColor(),
+        NSStrokeColorAttributeName: UIColor.black,
+        NSForegroundColorAttributeName: UIColor.white,
         NSFontAttributeName: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
         NSStrokeWidthAttributeName: -3.0 // Negative for stroke and fill
-    ]
+    ] as [String : Any]
     
     
     // MARK: - View Life Cycle
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
     
@@ -45,10 +45,10 @@ class MemeCreateViewController: UIViewController {
         topTextField.defaultTextAttributes = memeTextAttributes
         bottomTextField.defaultTextAttributes = memeTextAttributes
         
-        topTextField.textAlignment = .Center
-        bottomTextField.textAlignment = .Center
+        topTextField.textAlignment = .center
+        bottomTextField.textAlignment = .center
         
-        imageView.userInteractionEnabled = true
+        imageView.isUserInteractionEnabled = true
         imageView.frame = scrollView.bounds
 //        imageView.backgroundColor = UIColor.greenColor()
         scrollView.addSubview(imageView)
@@ -56,16 +56,16 @@ class MemeCreateViewController: UIViewController {
         resetMemeEditor()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
+        cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         
         if let meme = meme {
             topTextField.text = meme.topText
             bottomTextField.text = meme.bottomText
             imageView.image = meme.image
-            if let image = meme.image, contentOffset = meme.contentOffset,
-                zoomScale = meme.zoomScale {
+            if let image = meme.image, let contentOffset = meme.contentOffset,
+                let zoomScale = meme.zoomScale {
                 imageView.frame = CGRect(origin: scrollView.frame.origin, size:image.size)
                 scrollView.contentSize = image.size
 
@@ -87,32 +87,32 @@ class MemeCreateViewController: UIViewController {
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         centerScrollViewContents()
     }
 
     
     // MARK: - Actions
     
-    @IBAction func pickImageFromAlbum(sender: AnyObject) {
+    @IBAction func pickImageFromAlbum(_ sender: AnyObject) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = .PhotoLibrary
-        presentViewController(imagePicker, animated: true, completion: nil)
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: true, completion: nil)
     }
     
-    @IBAction func pickImageFromCamera(sender: AnyObject) {
+    @IBAction func pickImageFromCamera(_ sender: AnyObject) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = .Camera
-        presentViewController(imagePicker, animated: true, completion: nil)
+        imagePicker.sourceType = .camera
+        present(imagePicker, animated: true, completion: nil)
     }
     
-    @IBAction func shareMeme(sender: AnyObject) {
+    @IBAction func shareMeme(_ sender: AnyObject) {
         let memedImage = generateMemedImage()
         let controller = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
         
@@ -129,15 +129,15 @@ class MemeCreateViewController: UIViewController {
                 )
             }
             else {
-                controller.dismissViewControllerAnimated(true, completion: nil)
+                controller.dismiss(animated: true, completion: nil)
             }
         }
         
-        presentViewController(controller, animated: true, completion: nil)
+        present(controller, animated: true, completion: nil)
     }
     
-    @IBAction func cancelEditing(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func cancelEditing(_ sender: AnyObject) {
+        dismiss(animated: true, completion: nil)
     }
     
     
@@ -175,7 +175,7 @@ class MemeCreateViewController: UIViewController {
     
     // MARK: - Keyboard
     
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
 //        if !viewShiftedForKeyboard {
 //            view.frame.origin.y -= getKeyboardHeight(notification)
 //            viewShiftedForKeyboard = true
@@ -183,23 +183,23 @@ class MemeCreateViewController: UIViewController {
         view.frame.origin.y = -getKeyboardHeight(notification)
     }
     
-    func getKeyboardHeight(notification: NSNotification) -> CGFloat {
-        let userInfo = notification.userInfo
+    func getKeyboardHeight(_ notification: Notification) -> CGFloat {
+        let userInfo = (notification as NSNotification).userInfo
         let keyboardFrame = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
-        return keyboardFrame.CGRectValue().height
+        return keyboardFrame.cgRectValue.height
     }
     
     func subscribeToKeyboardNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MemeCreateViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MemeCreateViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MemeCreateViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MemeCreateViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func unsubscribeFromKeyboardNotifications() {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(_ notification: Notification) {
 //        if viewShiftedForKeyboard  {
 //            view.frame.origin.y += getKeyboardHeight(notification)
 //            viewShiftedForKeyboard = false
@@ -213,8 +213,8 @@ class MemeCreateViewController: UIViewController {
         var memedImage: UIImage
         
         // Hide toolbar and navbar
-        navigationBar.hidden = true
-        toolBar.hidden = true
+        navigationBar.isHidden = true
+        toolBar.isHidden = true
         
         // Render view into an image
         var outputFrame = view.frame
@@ -223,18 +223,18 @@ class MemeCreateViewController: UIViewController {
         outputFrame.origin.y = scrollView.frame.origin.y * -1
 
         UIGraphicsBeginImageContext(scrollView.frame.size)
-        view.drawViewHierarchyInRect(outputFrame, afterScreenUpdates: true)
-        memedImage = UIGraphicsGetImageFromCurrentImageContext()
+        view.drawHierarchy(in: outputFrame, afterScreenUpdates: true)
+        memedImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
         // Show toolbar and navbar
-        navigationBar.hidden = false
-        toolBar.hidden = false
+        navigationBar.isHidden = false
+        toolBar.isHidden = false
         
         return memedImage
     }
     
-    func saveMeme(image image: UIImage, topText: String?, bottomText: String?, zoomScale: CGFloat, contentOffset: CGPoint = CGPointZero, memedImage: UIImage) {
+    func saveMeme(image: UIImage, topText: String?, bottomText: String?, zoomScale: CGFloat, contentOffset: CGPoint = CGPoint.zero, memedImage: UIImage) {
         let meme = Meme(
             topText: topText,
             bottomText: bottomText,
@@ -244,7 +244,7 @@ class MemeCreateViewController: UIViewController {
             memedImage: memedImage
         )
         
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.memes.append(meme)
     }
 }
@@ -257,7 +257,7 @@ extension MemeCreateViewController: UINavigationControllerDelegate {}
 
 extension MemeCreateViewController: UIImagePickerControllerDelegate {
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             // reset zoomescale before changing image
             scrollView.zoomScale = 1.0
@@ -280,12 +280,12 @@ extension MemeCreateViewController: UIImagePickerControllerDelegate {
             
             centerScrollViewContents()
             
-            dismissViewControllerAnimated(true, completion: nil)
+            dismiss(animated: true, completion: nil)
         }
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
     }
     
 }
@@ -293,11 +293,11 @@ extension MemeCreateViewController: UIImagePickerControllerDelegate {
 // MARK: - Scroll View Delegate
 
 extension MemeCreateViewController: UIScrollViewDelegate {
-    func scrollViewDidZoom(scrollView: UIScrollView) {
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
         centerScrollViewContents()
     }
     
-    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
 }
@@ -306,7 +306,7 @@ extension MemeCreateViewController: UIScrollViewDelegate {
 
 extension MemeCreateViewController: UITextFieldDelegate {
 
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         if (textField.text == "TOP") || (textField.text == "BOTTOM") {
             textField.text = ""
         }
@@ -316,7 +316,7 @@ extension MemeCreateViewController: UITextFieldDelegate {
         textField.becomeFirstResponder()
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
         if textField == bottomTextField {

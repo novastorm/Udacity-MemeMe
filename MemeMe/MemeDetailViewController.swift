@@ -20,11 +20,11 @@ class MemeDetailViewController: UIViewController {
         imageView.image = meme.memedImage
     }
     
-    @IBAction func editMeme(sender: AnyObject) {
-        let createMemeVC = storyboard!.instantiateViewControllerWithIdentifier("MemeCreateViewController") as! MemeCreateViewController
+    @IBAction func editMeme(_ sender: AnyObject) {
+        let createMemeVC = storyboard!.instantiateViewController(withIdentifier: "MemeCreateViewController") as! MemeCreateViewController
         createMemeVC.meme = meme
-        navigationController!.presentViewController(createMemeVC, animated: true, completion: {
-                createMemeVC.toolBar.hidden = true
+        navigationController!.present(createMemeVC, animated: true, completion: {
+                createMemeVC.toolBar.isHidden = true
             })
     }
 }
