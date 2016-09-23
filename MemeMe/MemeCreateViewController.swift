@@ -10,6 +10,8 @@ import UIKit
 
 class MemeCreateViewController: UIViewController {
 
+    // MARK: - Properties
+    
     @IBOutlet weak var scrollView: UIScrollView!
 //    @IBOutlet weak var imageView: UIImageView!
     var imageView = UIImageView()
@@ -30,7 +32,10 @@ class MemeCreateViewController: UIViewController {
         NSFontAttributeName: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
         NSStrokeWidthAttributeName: -3.0 // Negative for stroke and fill
     ]
-
+    
+    
+    // MARK: - View Life Cycle
+    
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
@@ -85,7 +90,14 @@ class MemeCreateViewController: UIViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
     }
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        centerScrollViewContents()
+    }
 
+    
+    // MARK: - Actions
+    
     @IBAction func pickImageFromAlbum(sender: AnyObject) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
@@ -128,9 +140,9 @@ class MemeCreateViewController: UIViewController {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        centerScrollViewContents()
-    }
+    
+    
+    // MARK: - Helpers
     
     func centerScrollViewContents() {
         let boundsSize = scrollView.bounds.size
@@ -164,10 +176,11 @@ class MemeCreateViewController: UIViewController {
     // MARK: - Keyboard
     
     func keyboardWillShow(notification: NSNotification) {
-        if !viewShiftedForKeyboard {
-            view.frame.origin.y -= getKeyboardHeight(notification)
-            viewShiftedForKeyboard = true
-        }
+//        if !viewShiftedForKeyboard {
+//            view.frame.origin.y -= getKeyboardHeight(notification)
+//            viewShiftedForKeyboard = true
+//        }
+        view.frame.origin.y = -getKeyboardHeight(notification)
     }
     
     func getKeyboardHeight(notification: NSNotification) -> CGFloat {
@@ -177,8 +190,8 @@ class MemeCreateViewController: UIViewController {
     }
     
     func subscribeToKeyboardNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MemeCreateViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MemeCreateViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     func unsubscribeFromKeyboardNotifications() {
@@ -187,10 +200,11 @@ class MemeCreateViewController: UIViewController {
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        if viewShiftedForKeyboard  {
-            view.frame.origin.y += getKeyboardHeight(notification)
-            viewShiftedForKeyboard = false
-        }
+//        if viewShiftedForKeyboard  {
+//            view.frame.origin.y += getKeyboardHeight(notification)
+//            viewShiftedForKeyboard = false
+//        }
+        view.frame.origin.y = 0
     }
     
     // MARK: - Management
@@ -242,6 +256,7 @@ extension MemeCreateViewController: UINavigationControllerDelegate {}
 // MARK: - Image Picker Controller Delegate
 
 extension MemeCreateViewController: UIImagePickerControllerDelegate {
+    
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             // reset zoomescale before changing image
