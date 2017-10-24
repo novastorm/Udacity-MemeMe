@@ -18,7 +18,7 @@ class MemeCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        updateFlowLayout(view.frame.size)
+        updateFlowLayout(size: view.frame.size)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -31,7 +31,7 @@ class MemeCollectionViewController: UICollectionViewController {
         super.viewWillTransition(to: size, with: coordinator)
         
         if flowLayout != nil {
-            updateFlowLayout(size)
+            updateFlowLayout(size: size)
         }
     }
     
@@ -43,7 +43,7 @@ class MemeCollectionViewController: UICollectionViewController {
         let cellIdentifier = "MemeCollectionViewCell"
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! MemeCollectionViewCell
-        let meme = memes[(indexPath as NSIndexPath).item]
+        let meme = memes[indexPath.item]
         
         // Set cell properties
         cell.imageView?.image = meme.memedImage
@@ -52,15 +52,15 @@ class MemeCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print((indexPath as NSIndexPath).item)
+        print(indexPath.item)
         let detailVC = storyboard!.instantiateViewController(withIdentifier: "MemeDetailViewController") as! MemeDetailViewController
         
-        detailVC.meme = memes[(indexPath as NSIndexPath).item]
+        detailVC.meme = memes[indexPath.item]
         
         navigationController!.pushViewController(detailVC, animated: true)
     }
         
-    func updateFlowLayout(_ size: CGSize) {
+    func updateFlowLayout(size: CGSize) {
         let space: CGFloat = 3.0
         var dimension: CGFloat!
         if size.height > size.width {

@@ -26,7 +26,7 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "MemeTableViewCell"
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)!
-        let meme = memes[(indexPath as NSIndexPath).row]
+        let meme = memes[indexPath.row]
         
         // Set the name and image
         cell.imageView?.image = meme.memedImage
@@ -37,7 +37,7 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            (UIApplication.shared.delegate as! AppDelegate).memes.remove(at: (indexPath as NSIndexPath).row)
+            (UIApplication.shared.delegate as! AppDelegate).memes.remove(at: indexPath.row)
             (view as! UITableView).deleteRows(at: [indexPath], with: .automatic)
         }
     }
@@ -45,7 +45,7 @@ class MemeTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = storyboard!.instantiateViewController(withIdentifier: "MemeDetailViewController") as! MemeDetailViewController
         
-        detailVC.meme = memes[(indexPath as NSIndexPath).row]
+        detailVC.meme = memes[indexPath.row]
         
         navigationController!.pushViewController(detailVC, animated: true)
     }
